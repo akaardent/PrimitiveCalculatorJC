@@ -96,7 +96,7 @@ class MainActivity : ComponentActivity() {
                                     primerState.value.toCharArray()
                                         .toTypedArray()
                                 val lastChar = arrayOfText[arrayOfText.lastIndex]
-                                if (lastChar == '+' || lastChar == '-' || lastChar == '×' || lastChar == charDiv || lastChar == '('
+                                if (lastChar == '+' || lastChar == '-' || lastChar == '*' || lastChar == charDiv || lastChar == '('
                                 ) {
                                     primerState.value = "${primerState.value}("
                                 } else {
@@ -270,7 +270,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         Button(onClick = {
-                            primerState.value = "${primerState.value}$,"
+                            primerState.value = "${primerState.value},"
                         }, colors = ButtonDefaults.buttonColors(containerColor = colorNum)) {
                             Text(
                                 fontFamily = FontFamily.Serif,
