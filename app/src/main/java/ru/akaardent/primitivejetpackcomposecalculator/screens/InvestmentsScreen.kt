@@ -50,9 +50,9 @@ import ru.akaardent.primitivejetpackcomposecalculator.writeDataToFile
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InvestmentsScreen(
-    onClickToScreen1: () -> Unit,
-    onClickToScreen2: () -> Unit,
-    onClickToScreen3: () -> Unit,
+    clickToMainScreen: () -> Unit,
+    clickToNotesScreen: () -> Unit,
+
 ) {
     var resultState by remember {
         mutableStateOf("")
@@ -350,9 +350,8 @@ fun InvestmentsScreen(
         }
 
         BottomBar(
-            onClickToScreen1 = { onClickToScreen1() },
-            onClickToScreen2 = { onClickToScreen2() },
-            onClickToScreen3 = { onClickToScreen3() }
+            clickToMainScreen = clickToMainScreen,
+            clickToNotesScreen = clickToNotesScreen
         )
     }
 

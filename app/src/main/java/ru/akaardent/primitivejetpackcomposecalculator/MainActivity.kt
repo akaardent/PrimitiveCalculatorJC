@@ -15,57 +15,48 @@ val buttonSize = 35.sp
 
 class MainActivity : ComponentActivity() {
 
-
-    private val screen1 = "screen1"
-    private val screen2 = "screen2"
-    private val screen3 = "screen3"
+    private val mainScreen = "screen1"
+    private val investmentsScreen = "screen2"
+    private val notesScreen = "screen3"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         setContent {
             val navController = rememberNavController()
 
             NavHost(
                 navController = navController,
-                startDestination = screen2
+                startDestination = mainScreen
             ) {
-                composable(screen1) {
+                composable(mainScreen) {
                     MainScreen(
-                        {
-                            navController.navigate(screen1)
-                        },
-                        {
-                            navController.navigate(screen2)
-                        },
-                        {
-                            navController.navigate(screen3)
-                        },
+                        clickToInvestmentsScreen = { navController.navigate(investmentsScreen) },
+                        clickToNotesScreen = { navController.navigate(notesScreen) },
                     )
                 }
-                composable(screen2) {
+                composable(investmentsScreen) {
                     InvestmentsScreen(
-                        {
-                            navController.navigate(screen1)
+                        clickToMainScreen = {
+                            navController.popBackStack()
+                            navController.popBackStack()
+                            navController.navigate(mainScreen)
                         },
-                        {
-                            navController.navigate(screen2)
-                        },
-                        {
-                            navController.navigate(screen3)
+                        clickToNotesScreen = {
+                            navController.popBackStack()
+                            navController.navigate(notesScreen)
                         },
                     )
                 }
-                composable(screen3) {
+                composable(notesScreen) {
                     NotesScreen(
-                        {
-                            navController.navigate(screen1)
+                        clickToMainScreen = {
+                            navController.popBackStack()
+                            navController.popBackStack()
+                            navController.navigate(mainScreen)
                         },
-                        {
-                            navController.navigate(screen2)
-                        },
-                        {
-                            navController.navigate(screen3)
+                        clickToInvestmentsScreen = {
+                            navController.popBackStack()
+                            navController.navigate(investmentsScreen)
                         },
                     )
                 }

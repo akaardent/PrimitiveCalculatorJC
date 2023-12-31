@@ -51,9 +51,8 @@ const val charDiv = '/'
 
 @Composable
 fun MainScreen(
-    onClickToScreen1: () -> Unit,
-    onClickToScreen2: () -> Unit,
-    onClickToScreen3: () -> Unit,
+    clickToInvestmentsScreen: () -> Unit,
+    clickToNotesScreen: () -> Unit,
 ) {
 
     var resultState by remember {
@@ -543,10 +542,9 @@ fun MainScreen(
             }
         }
         BottomBar(
-            onClickToScreen1 = { onClickToScreen1() },
-            onClickToScreen2 = { onClickToScreen2() },
-            onClickToScreen3 = { onClickToScreen3() })
-
+            clickToNotesScreen = clickToNotesScreen,
+            clickToInvestmentsScreen = clickToInvestmentsScreen
+        )
     }
 
 }

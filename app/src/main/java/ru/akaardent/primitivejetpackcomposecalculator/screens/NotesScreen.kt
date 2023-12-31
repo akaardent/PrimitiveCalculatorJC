@@ -43,9 +43,8 @@ import ru.akaardent.primitivejetpackcomposecalculator.writeDataToFile
 
 @Composable
 fun NotesScreen(
-    onClickToScreen1: () -> Unit,
-    onClickToScreen2: () -> Unit,
-    onClickToScreen3: () -> Unit,
+    clickToMainScreen: () -> Unit,
+    clickToInvestmentsScreen: () -> Unit,
 ) {
     val context = LocalContext.current
     val notesMutableState = remember {
@@ -207,7 +206,9 @@ fun NotesScreen(
         }
 
         BottomBar(
-            onClickToScreen1, onClickToScreen2, onClickToScreen3, selected3 = true
+            clickToMainScreen = clickToMainScreen,
+            clickToInvestmentsScreen = clickToInvestmentsScreen,
+            selected3 = true
         )
 
     }
