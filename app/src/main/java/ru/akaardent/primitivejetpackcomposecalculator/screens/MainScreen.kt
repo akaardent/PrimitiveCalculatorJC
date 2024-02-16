@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
@@ -40,8 +41,8 @@ import ru.akaardent.primitivejetpackcomposecalculator.readData
 import ru.akaardent.primitivejetpackcomposecalculator.ui.theme.colorClear
 import ru.akaardent.primitivejetpackcomposecalculator.ui.theme.colorNum
 import ru.akaardent.primitivejetpackcomposecalculator.ui.theme.colorZnak
-import ru.akaardent.primitivejetpackcomposecalculator.ui.theme.copyText
-import ru.akaardent.primitivejetpackcomposecalculator.ui.theme.insertTextFromClipboard
+import ru.akaardent.primitivejetpackcomposecalculator.copyText
+import ru.akaardent.primitivejetpackcomposecalculator.insertTextFromClipboard
 import ru.akaardent.primitivejetpackcomposecalculator.ui.theme.mainColor
 import ru.akaardent.primitivejetpackcomposecalculator.ui.theme.textColor
 import ru.akaardent.primitivejetpackcomposecalculator.writeDataToFile
@@ -73,10 +74,15 @@ fun MainScreen(
             .fillMaxHeight(),
     ) {
         TopAppBar(
-            modifier = Modifier.fillMaxWidth(),
-            backgroundColor = mainColor
+            modifier = Modifier.fillMaxWidth(), backgroundColor = mainColor
         ) {
-            Text(text = "TopApp")
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Text(text = "Calculator with saving", fontSize = 20.sp)
+            }
         }
         Column(
             modifier = Modifier
@@ -98,16 +104,18 @@ fun MainScreen(
                     modifier = Modifier.weight(7f)
                 )
                 Column(modifier = Modifier.weight(1f)) {
-
-                    IconButton(
-                        onClick = {
-                            copyText(primerState, context)
-                        },
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.ContentCopy, contentDescription = "copy",
-                            modifier = Modifier.size(sizeOfIcons)
-                        )
+                    if (primerState.isNotEmpty()) {
+                        IconButton(
+                            onClick = {
+                                copyText(primerState, context)
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ContentCopy,
+                                contentDescription = "copy",
+                                modifier = Modifier.size(sizeOfIcons)
+                            )
+                        }
                     }
                     IconButton(
                         onClick = {
@@ -119,7 +127,8 @@ fun MainScreen(
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.Default.ContentPaste, contentDescription = "paste",
+                            imageVector = Icons.Default.ContentPaste,
+                            contentDescription = "paste",
                             modifier = Modifier.size(sizeOfIcons)
                         )
                     }
@@ -138,8 +147,7 @@ fun MainScreen(
                     color = textColor,
                     text = resultState,
                     fontSize = 60.sp,
-                    modifier = Modifier
-                        .weight(7f)
+                    modifier = Modifier.weight(7f)
 //                    .fillMaxHeight(0.25f),
                 )
                 if (resultState != "") {
@@ -186,11 +194,9 @@ fun MainScreen(
                                     )
                                 }
                                 DropdownMenu(
-                                    expanded = infoAddNote,
-                                    onDismissRequest = {
+                                    expanded = infoAddNote, onDismissRequest = {
                                         infoAddNote = false
-                                    },
-                                    modifier = Modifier.padding(4.dp)
+                                    }, modifier = Modifier.padding(4.dp)
                                 ) {
                                     Text(text = "добавить выражение\nв список заметок")
                                 }
@@ -213,8 +219,7 @@ fun MainScreen(
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
 
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
 
                 ) {
 
@@ -241,23 +246,20 @@ fun MainScreen(
                     Button(
                         onClick = {
                             if (primerState.isNotEmpty()) {
-                                val arrayOfText =
-                                    primerState.toCharArray()
-                                        .toTypedArray()
+                                val arrayOfText = primerState.toCharArray().toTypedArray()
                                 val lastChar = arrayOfText[arrayOfText.lastIndex]
-                                if (lastChar == '+' || lastChar == '-' || lastChar == '*' || lastChar == charDiv || lastChar == '('
-                                ) {
+                                if (lastChar == '+' || lastChar == '-' || lastChar == '*' || lastChar == charDiv || lastChar == '(') {
                                     primerState = "${primerState}("
                                 } else {
                                     primerState = "${primerState})"
-                                    if (operationCount > 0) resultState =
-                                        makeResult(primerState)
+                                    if (operationCount > 0) resultState = makeResult(primerState)
                                 }
 
                             } else {
                                 primerState = "${primerState}("
                             }
-                        }, colors = ButtonDefaults.buttonColors(containerColor = colorZnak),
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = colorZnak),
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = horPad)
@@ -274,7 +276,8 @@ fun MainScreen(
                         onClick = {
                             primerState = "${primerState}%"
                             operationCount += 1
-                        }, colors = ButtonDefaults.buttonColors(containerColor = colorZnak),
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = colorZnak),
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = horPad)
@@ -291,7 +294,8 @@ fun MainScreen(
                         onClick = {
                             primerState = "${primerState}$charDiv"
                             operationCount += 1
-                        }, colors = ButtonDefaults.buttonColors(containerColor = colorZnak),
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = colorZnak),
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = horPad)
@@ -309,18 +313,17 @@ fun MainScreen(
 
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
 
                 ) {
                     for (i in 7..9) {
                         Button(
                             onClick = {
                                 primerState = "${primerState}$i"
-                                if (operationCount > 0) resultState =
-                                    makeResult(primerState)
+                                if (operationCount > 0) resultState = makeResult(primerState)
 
-                            }, colors = ButtonDefaults.buttonColors(containerColor = colorNum),
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = colorNum),
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(horizontal = horPad)
@@ -338,7 +341,8 @@ fun MainScreen(
                         onClick = {
                             primerState = "${primerState}*"
                             operationCount += 1
-                        }, colors = ButtonDefaults.buttonColors(containerColor = colorZnak),
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = colorZnak),
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = horPad)
@@ -355,17 +359,16 @@ fun MainScreen(
 
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
 
                 ) {
                     for (i in 4..6) {
                         Button(
                             onClick = {
                                 primerState = "${primerState}$i"
-                                if (operationCount > 0) resultState =
-                                    makeResult(primerState)
-                            }, colors = ButtonDefaults.buttonColors(containerColor = colorNum),
+                                if (operationCount > 0) resultState = makeResult(primerState)
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = colorNum),
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(horizontal = horPad)
@@ -383,7 +386,8 @@ fun MainScreen(
                         onClick = {
                             primerState = "${primerState}-"
                             operationCount += 1
-                        }, colors = ButtonDefaults.buttonColors(containerColor = colorZnak),
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = colorZnak),
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = horPad)
@@ -401,17 +405,16 @@ fun MainScreen(
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
 
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
 
                 ) {
                     for (i in 1..3) {
                         Button(
                             onClick = {
                                 primerState = "${primerState}$i"
-                                if (operationCount > 0) resultState =
-                                    makeResult(primerState)
-                            }, colors = ButtonDefaults.buttonColors(containerColor = colorNum),
+                                if (operationCount > 0) resultState = makeResult(primerState)
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = colorNum),
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(horizontal = horPad)
@@ -430,7 +433,8 @@ fun MainScreen(
                             primerState = "${primerState}+"
                             operationCount += 1
 
-                        }, colors = ButtonDefaults.buttonColors(containerColor = colorZnak),
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = colorZnak),
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = horPad)
@@ -448,16 +452,15 @@ fun MainScreen(
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
 
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
 
                 ) {
                     Button(
                         onClick = {
                             primerState = "${primerState}0"
-                            if (operationCount > 0) resultState =
-                                makeResult(primerState)
-                        }, colors = ButtonDefaults.buttonColors(containerColor = colorNum),
+                            if (operationCount > 0) resultState = makeResult(primerState)
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = colorNum),
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = horPad)
@@ -473,7 +476,8 @@ fun MainScreen(
                     Button(
                         onClick = {
                             primerState = "${primerState},"
-                        }, colors = ButtonDefaults.buttonColors(containerColor = colorNum),
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = colorNum),
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = horPad)
@@ -490,19 +494,15 @@ fun MainScreen(
                         onClick = {
                             if (primerState.isNotEmpty()) {
                                 val lastChar = primerState.substring(
-                                    primerState.lastIndex,
-                                    primerState.lastIndex + 1
+                                    primerState.lastIndex, primerState.lastIndex + 1
                                 )
                                 if (lastChar == '+'.toString() || lastChar == '-'.toString() || lastChar == '*'.toString() || lastChar == charDiv.toString()) {
                                     operationCount -= 1
                                 }
-                                primerState = primerState
-                                    .substring(
-                                        0,
-                                        primerState.lastIndex
-                                    )
-                                if (operationCount > 0) resultState =
-                                    makeResult(primerState)
+                                primerState = primerState.substring(
+                                    0, primerState.lastIndex
+                                )
+                                if (operationCount > 0) resultState = makeResult(primerState)
                             }
 
                         },
@@ -523,7 +523,8 @@ fun MainScreen(
                         onClick = {
                             primerState = resultState
                             resultState = ""
-                        }, colors = ButtonDefaults.buttonColors(containerColor = colorZnak),
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = colorZnak),
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = horPad)
@@ -543,7 +544,8 @@ fun MainScreen(
         }
         BottomBar(
             clickToNotesScreen = clickToNotesScreen,
-            clickToInvestmentsScreen = clickToInvestmentsScreen
+            clickToInvestmentsScreen = clickToInvestmentsScreen,
+            selected1 = true,
         )
     }
 

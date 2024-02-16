@@ -7,21 +7,20 @@ data class Bond(
     var nominalText: String = "",
     var couponText: String = "",
     var numberOfCouponText: String = "",
-    var numberOfBondsText: String = "",
     var nkdText: String = "",
     var termText: String = "",
 ) {
     override fun toString(): String {
-        return "Bond(quantity=${quantity}, price=${price}, number=$numberOfBonds, " + "nominal=$nominal, coupon=$coupon,num_kupons = $numberOfCoupon, nkd=$nkd, term=$term)"
+        return "Bond(quantity=${quantity}, price=${price}, number=$quantity, " + "nominal=$nominal, coupon=$coupon,num_kupons = $numberOfCoupon, nkd=$nkd, term=$term)"
     }
 
     fun myIsEmpty(): Boolean {
-        return (quantityText.isEmpty() || priceText.isEmpty() || nominalText.isEmpty() || couponText.isEmpty() || numberOfCouponText.isEmpty() || numberOfBondsText.isEmpty() || nkdText.isEmpty())
+        return (quantityText.isEmpty() || priceText.isEmpty() || nominalText.isEmpty() || couponText.isEmpty() || numberOfCouponText.isEmpty() || quantityText.isEmpty() || nkdText.isEmpty())
 //
 
     }
 
-    private var quantity: Int = try {
+    var quantity: Int = try {
         quantityText.toInt()
     } catch (e: Exception) {
         0
@@ -42,11 +41,6 @@ data class Bond(
     } catch (e: Exception) {
         0f
     }
-    var numberOfBonds: Int = try {
-        numberOfBondsText.toInt()
-    } catch (e: Exception) {
-        0
-    }
     var nkd: Float = try {
         nkdText.toFloat()
     } catch (e: Exception) {
@@ -64,15 +58,18 @@ data class Bond(
     }
 }
 
-fun Bond.investments(): String {
-    val komis = 0
-    val sumCoup = coupon * numberOfCoupon * numberOfBonds
-    val resultKomission = price * komis / 100 * numberOfBonds
-    val zatrati = numberOfBonds * (price + nkd) + resultKomission
-    val prib = (numberOfBonds * nominal - zatrati) * 0.87 + coupon * numberOfCoupon * 0.87
+fun Bond.investments(komis: Komission): String {
+    val sumCoup = coupon * numberOfCoupon * quantity
+    val resultKomission = price * komis.buy / 100 * quantity
+    val zatrati = quantity * (price + nkd) + resultKomission
+    val prib = (quantity * nominal - zatrati) * 0.87 + coupon * numberOfCoupon * 0.87
     return if (name != "") {
-        "Компания: $name\n"
+        "Компания: $name"
     } else {
         ""
-    } + "Горизонт - $term\n" + "Доходность - ${prib / zatrati * 100}%\n" + "Затраты - ${zatrati}р (включая комиссию: ${komis}% : ${resultKomission}р\n" + "Купонами будет начислено: ${sumCoup * 0.87}р, (сумма начислений: ${sumCoup}р, Налог: ${sumCoup * 0.13}р)\n" + "Номинал вернется: ${nominal * numberOfBonds}р\n" + "Выручка(общая сумма поступлений): ${nominal * numberOfBonds + sumCoup * 0.87}p\n" + "Налог на прибыль по номиналу(без купонов): ${(numberOfBonds * nominal - zatrati) * 0.13}р." + "Прибыль - ${prib}р\n"
+    } + if (termText.isNotEmpty()) {
+        "\nГоризонт - $term"
+    } else {
+        ""
+    } + "\nДоходность: ${prib / zatrati * 100}%;" + "\nЗатраты: ${zatrati}р (включая комиссию: ${komis.sell}% : ${resultKomission}р);" + "\nКупонами будет начислено: ${sumCoup * 0.87}р;" + "\n(сумма начислений: ${sumCoup}р, \nНалог: ${sumCoup * 0.13}р);" + "\nНоминал вернется: ${nominal * quantity}р;" + "\nВыручка(общая сумма поступлений): \n${nominal * quantity + sumCoup * 0.87}p;" + "\nНалог на прибыль по номиналу(без купонов): \n${(quantity * nominal - zatrati) * 0.13}р;" + "\nПрибыль: ${prib}р;"
 }

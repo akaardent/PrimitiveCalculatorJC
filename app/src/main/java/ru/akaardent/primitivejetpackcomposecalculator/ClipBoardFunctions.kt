@@ -1,4 +1,4 @@
-package ru.akaardent.primitivejetpackcomposecalculator.ui.theme
+package ru.akaardent.primitivejetpackcomposecalculator
 
 import android.content.ClipData
 import android.content.Context

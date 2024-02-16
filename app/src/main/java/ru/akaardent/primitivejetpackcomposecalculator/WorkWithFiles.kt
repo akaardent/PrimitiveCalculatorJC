@@ -46,6 +46,7 @@ fun MutableList<Note>.writeDataToFile(context: Context) {
                 file.appendText(note.toFileString() + "\n")
             }
         }
+
 //            Toast.makeText(this, "local database has updated", Toast.LENGTH_SHORT).show()
         Log.e("MyLog", "end = WriteDataByMutableMap")
     } catch (e: Exception) {

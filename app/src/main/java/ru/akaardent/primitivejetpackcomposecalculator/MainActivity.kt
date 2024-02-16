@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import ru.akaardent.primitivejetpackcomposecalculator.screens.InvestmentsScreen
 import ru.akaardent.primitivejetpackcomposecalculator.screens.MainScreen
 import ru.akaardent.primitivejetpackcomposecalculator.screens.NotesScreen
+import ru.akaardent.primitivejetpackcomposecalculator.ui.theme.MyApplicationTheme
 
 val buttonSize = 35.sp
 
@@ -23,46 +24,48 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val navController = rememberNavController()
+            MyApplicationTheme {
+                NavHost(
+                    navController = navController,
+                    startDestination = mainScreen
+                ) {
+                    composable(mainScreen) {
+                        MainScreen(
+                            clickToInvestmentsScreen = { navController.navigate(investmentsScreen) },
+                            clickToNotesScreen = { navController.navigate(notesScreen) },
+                        )
+                    }
+                    composable(investmentsScreen) {
+                        InvestmentsScreen(
+                            clickToMainScreen = {
+                                navController.popBackStack()
+                                navController.popBackStack()
+                                navController.navigate(mainScreen)
+                            },
+                            clickToNotesScreen = {
+                                navController.popBackStack()
+                                navController.navigate(notesScreen)
+                            },
+                        )
+                    }
+                    composable(notesScreen) {
+                        NotesScreen(
+                            clickToMainScreen = {
+                                navController.popBackStack()
+                                navController.popBackStack()
+                                navController.navigate(mainScreen)
+                            },
+                            clickToInvestmentsScreen = {
+                                navController.popBackStack()
+                                navController.navigate(investmentsScreen)
+                            },
+                        )
+                    }
 
-            NavHost(
-                navController = navController,
-                startDestination = mainScreen
-            ) {
-                composable(mainScreen) {
-                    MainScreen(
-                        clickToInvestmentsScreen = { navController.navigate(investmentsScreen) },
-                        clickToNotesScreen = { navController.navigate(notesScreen) },
-                    )
-                }
-                composable(investmentsScreen) {
-                    InvestmentsScreen(
-                        clickToMainScreen = {
-                            navController.popBackStack()
-                            navController.popBackStack()
-                            navController.navigate(mainScreen)
-                        },
-                        clickToNotesScreen = {
-                            navController.popBackStack()
-                            navController.navigate(notesScreen)
-                        },
-                    )
-                }
-                composable(notesScreen) {
-                    NotesScreen(
-                        clickToMainScreen = {
-                            navController.popBackStack()
-                            navController.popBackStack()
-                            navController.navigate(mainScreen)
-                        },
-                        clickToInvestmentsScreen = {
-                            navController.popBackStack()
-                            navController.navigate(investmentsScreen)
-                        },
-                    )
-                }
 
-
+                }
             }
+
         }
     }
 }

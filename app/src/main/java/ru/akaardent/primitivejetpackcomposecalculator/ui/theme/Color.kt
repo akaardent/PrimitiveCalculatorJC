@@ -15,4 +15,3 @@ val colorClear = Color(0xFFD576BD)
 val colorNum = Color(0xFF868585)
 val textColor = Color(0xFF000000)
 val mainColor = Color(0xFFD81B60)
-val notesColor = Color.LightGray
